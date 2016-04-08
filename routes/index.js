@@ -1,34 +1,49 @@
 var express = require('express');
 var router = express.Router();
-var multer = require('multer'),
-  bodyParser = require('body-parser'),
-  path = require('path');
+// require multer
+var multer = require('multer');
 
-rename: function (fieldname, filename) {
-  return fieldname + filename + Date.now()
-}
+// function for storing setting the file destination and filename
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // set the destination directory
+    cb(null, 'uploads/')
+  },
+  /* 
+  set the filename: 
+    name of the field in our form (file.fieldname)
+    + a randomly generated number from 1 to a billion (Math.floor(Math.random() * 1000000000))
+    + the current date in miliseconds (Date.now())
+    + the original file name (file.originalname)
+    */
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Math.floor(Math.random() * 1000000000) + '-' +  Date.now() + '-' + file.originalname);
+  }
+})
 
-/* GET home page. */
+// variable for calling our storage function
+var upload = multer({ storage: storage });
+
+// get handler for our index page
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Upload' });
 });
 
-router.post('/', multer({ dest: 'uploads/'}).single('upl'), function(req,res){
-  console.log(req.body); //form fields
-  /* example output:
-  { title: 'abc' }
-   */
-  console.log(req.file); //form files
-  /* example output:
-            { fieldname: 'upl',
-              originalname: 'grumpy.png',
-              encoding: '7bit',
-              mimetype: 'image/png',
-              destination: './uploads/',
-              filename: '436ec561793aa4dc475a88e84776b1b9',
-              path: 'uploads/436ec561793aa4dc475a88e84776b1b9',
-              size: 277056 }
-   */
-  res.status(204).end();
+// get handler for our index page
+router.get('/success', function(req, res, next) {
+  res.render('success', { title: 'Success' });
 });
+
+// post handler for our upload form
+router.post('/', upload.single('upload'), function(req, res){
+  // log form fields to the console
+  console.log(req.body); //form fields
+
+
+  // log file info to the console
+  console.log(req.file); //form files
+
+  res.redirect('/success');
+});
+
 module.exports = router;
