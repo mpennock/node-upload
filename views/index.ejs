@@ -5,17 +5,15 @@
     <link rel='stylesheet' href='/stylesheets/styles.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <form method="post" action="/" enctype="multipart/form-data">
-    	<div>
-    		<input type="text" name="title" placeholder="title">
-    	</div>
-    	<div>
-    		<input type="file" name="upload">
-    	</div>
-    	<div>
-    		<input type="submit">
-    	</div>
-    </form>
+  <h1>File Upload</h1>
+  <form method="post" action="/" enctype="multipart/form-data">
+    <div>
+      <label for="upload">Select file: </label>
+      <input type="file" name="upload">
+    </div>
+    <div>
+      <input type="submit">
+    </div>
+  </form>
   </body>
 </html>

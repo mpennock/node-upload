@@ -5,9 +5,8 @@ var multer = require('multer');
 
 // function for storing setting the file destination and filename
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // set the destination directory
-    cb(null, 'uploads/')
+  destination: function (req, file, callback) {
+    callback(null, 'uploads/');
   },
   /* 
   set the filename: 
@@ -16,10 +15,10 @@ var storage = multer.diskStorage({
     + the current date in miliseconds (Date.now())
     + the original file name (file.originalname)
     */
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Math.floor(Math.random() * 1000000000) + '-' +  Date.now() + '-' + file.originalname);
+  filename: function (req, file, callback) {
+    callback(null, Date.now()+ '-' + file.originalname);
   }
-})
+});
 
 // variable for calling our storage function
 var upload = multer({ storage: storage });
